@@ -1,10 +1,25 @@
 import sys, os, glob
 from file_reader import FileReader
+from base_file import BaseFile
+from template_file import TemplateFile
 
 class Render():
 
 	arg = None
 	base_file_path = None
+	base_file = None
+	working_dir = ""
+
+	@classmethod
+	def show_working_dir(self):
+		return self.working_dir
+
+	@classmethod
+	def find_last_slash_in_str(self, string):
+		string = string[::-1]
+		for i in range (0, len(string) ): 
+			if string[i] == "/":
+				return -i
 
 	def __init__(self, arg):
 		self.arg = arg
@@ -14,22 +29,25 @@ class Render():
 		#python should open file in dir where command was launched, not dir where .py file actually is
 	
 		self.base_file_path = self.arg[1]
-		last_slash_in_file_path = self.__find_last_slash_in_str(self.base_file_path)
-		directory_with_templates = self.base_file_path[0:last_slash_in_file_path]
-		#print(directory_with_templates) #DEBUG
-		for filename in glob.glob(directory_with_templates + "*" + ".html"):
+		self.base_file = BaseFile(self.base_file_path)		
+		last_slash_in_file_path = self.find_last_slash_in_str(self.base_file_path)
+		self.working_dir = self.base_file_path[0:last_slash_in_file_path]
+		self.check_if_dirs_exsist()
+		for filename in glob.glob(self.working_dir + "*" + ".html"):
 			#print(filename) #DEBUG
 			if filename != self.base_file_path:
 				self.__start_compare(filename)
 
-	def __find_last_slash_in_str(self, string):
-		string = string[::-1]
-		for i in range (0, len(string) ): 
-			if string[i] == "/":
-				return -i
-
 	def __start_compare(self, filename):
-		base_file = FileReader(filename)
-		base_file.find_next_tag()
+		template_file = TemplateFile(filename)
+		template_file.render(base_file=self.base_file)
+
+	def check_if_dirs_exsist(self):
+		if not os.path.exists(self.working_dir+"rendered"):
+			print("Creating project directories")
+			self.create_project_dirs()
+
+	def create_project_dirs(self):
+		os.mkdir(self.working_dir+"rendered")
 
 	#def find_tag_in_file():	
