@@ -30,16 +30,6 @@ class FileReader():
 			return False
 		#pure_text = line_text = ''.join(line_text.split())
 
-		# if len(pure_text)>4:
-		# 	if pure_text[0] == "{" and pure_text[1] == "%":
-		# 		self.tag = pure_text[2:-2]
-		# 		print(self.tag)
-		# 		return True
-		# 	else:
-		# 		return False
-		# else:
-		# 	return False
-
 	def create_new_file_path(self):
 		filename = self.file_path[render.Render.find_last_slash_in_str(self.file_path):]
 		return render.Render.show_working_dir()+"rendered/"+filename

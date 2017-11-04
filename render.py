@@ -1,4 +1,4 @@
-import sys, os, glob
+import sys, os, glob, shutil
 from file_reader import FileReader
 from base_file import BaseFile
 from template_file import TemplateFile
@@ -33,6 +33,7 @@ class Render():
 		last_slash_in_file_path = self.find_last_slash_in_str(self.base_file_path)
 		self.working_dir = self.base_file_path[0:last_slash_in_file_path]
 		self.check_if_dirs_exsist()
+		self.backup_old_files
 		for filename in glob.glob(self.working_dir + "*" + ".html"):
 			#print(filename) #DEBUG
 			if filename != self.base_file_path:
@@ -43,11 +44,19 @@ class Render():
 		template_file.render(base_file=self.base_file)
 
 	def check_if_dirs_exsist(self):
-		if not os.path.exists(self.working_dir+"rendered"):
+		if not (os.path.exists(self.working_dir+"rendered") and os.path.exists(self.working_dir+"backup")):
 			print("Creating project directories")
 			self.create_project_dirs()
 
 	def create_project_dirs(self):
 		os.mkdir(self.working_dir+"rendered")
+		os.mkdir(self.working_dir+"backup")
+
+	def backup_old_files(self): 
+		os.mkdir(self.working_dir+"tmp")
+		os.rename(self.working_dir+"rendered/*.html", self.working_dir+"tmp/")
+		shutil.rmtree(self.working_dir+"backup")
+		os.rename(self.working_dir+"tmp", self.working_dir+"backup")
+
 
 	#def find_tag_in_file():	
