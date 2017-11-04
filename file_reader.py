@@ -1,4 +1,5 @@
-import render
+import logging, render
+from helpers.helper_files import HelperFiles
 
 class FileReader():
 
@@ -31,8 +32,9 @@ class FileReader():
 		#pure_text = line_text = ''.join(line_text.split())
 
 	def create_new_file_path(self):
-		filename = self.file_path[render.Render.find_last_slash_in_str(self.file_path):]
-		return render.Render.show_working_dir()+"rendered/"+filename
+		filename = HelperFiles.get_filename_from_filepath(self.file_path)
+		logging.debug("new file path: "+render.Render.get_working_dir_from_filepath(self.file_path)+"rendered/"+filename)
+		return render.Render.get_working_dir_from_filepath(self.file_path)+"rendered/"+filename
 
 	def clear_file(self):
 		print("FileRender.clear_file() -> to be implemented")

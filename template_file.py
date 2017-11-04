@@ -1,3 +1,4 @@
+import logging
 from file_reader import FileReader
 
 class TemplateFile(FileReader):

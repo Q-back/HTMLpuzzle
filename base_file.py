@@ -1,3 +1,4 @@
+import logging
 from file_reader import FileReader
 
 class BaseFile(FileReader):
@@ -10,6 +11,7 @@ class BaseFile(FileReader):
 			if not self._check_if_line_is_tag(line_text):
 				new_file.write(line_text)
 			else:
-				print("to be implemented")
+				logging.warning("to be implemented")
 		new_file.close()
 		base_file.close()
+		logging.debug("File rendered to: "+self.new_file_path)
