@@ -17,7 +17,6 @@ class TemplateFile(FileReader):
 				if not self._check_if_line_is_endtag(line_text):
 					file_to_write.write(line_text)
 				else:
-					logging.debug("Found end tag")
 					break
 		template_file.close()
 
@@ -26,7 +25,8 @@ class TemplateFile(FileReader):
 		# Checks if line contains MATCHING endtag
 		tag_start_index = line_text.find("{%/")
 		if tag_start_index > -1:
-			endtag = line_text[tag_start_index:line_text.find("%}")]
+			endtag = line_text[tag_start_index+3:line_text.find("%}")]
+			logging.debug("found endtag: "+endtag)
 			if endtag == self.tag:
 				return True
 		else:

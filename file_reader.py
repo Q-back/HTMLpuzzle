@@ -35,7 +35,8 @@ class FileReader():
 	def _check_if_line_is_tag(self, line_text):
 		tag_start_index = line_text.find("{%")
 		if tag_start_index > -1:
-			self.tag = line_text[tag_start_index+1:line_text.find("%}")]
+			self.tag = line_text[tag_start_index+2:line_text.find("%}")]
+			logging.debug("set tag: "+self.tag)
 			return True
 		else:
 			return False

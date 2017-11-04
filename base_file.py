@@ -21,13 +21,14 @@ class BaseFile(FileReader):
 		template_starts = line_text.find("{%") # noob method to check if there is tag left in text
 		if template_starts > -1:
 			content_to_start_tag = line_text[:line_text.find("{%")]
-			content_from_end_tag = line_text[line_text.find("%}")]
+			content_from_end_tag = line_text[line_text.find("%}")+2:]
 			file.write(content_to_start_tag)
 			template.write_tag_content(self.tag, file)
 			if self._check_if_line_is_tag(content_from_end_tag):
 				self.write_tag(line_text, file, template) # There is another tag to render, so recurency
 			else:
-				file.write(content_from_end_tag)
+				if content_from_end_tag!="\n":
+					file.write(content_from_end_tag)
 				return 0
 
 		else:
