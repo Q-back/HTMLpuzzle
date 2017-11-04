@@ -64,7 +64,6 @@ class Render():
 			logging.debug("rm tmp fine")
 
 		os.mkdir(self.working_dir+"tmp")
-		# os.rename(self.working_dir+"rendered/*", self.working_dir+"tmp/")
 		for backuped_filename in glob.glob(self.working_dir+"rendered/*"):
 			logging.debug("backuped_filename="+backuped_filename)
 			os.rename(backuped_filename, self.working_dir+"tmp/"+HelperFiles.get_filename_from_filepath(backuped_filename)) 

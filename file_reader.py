@@ -15,12 +15,22 @@ class FileReader():
 	def find_next_tag(self):
 		file = open(self.file_path, "r")
 		file.seek(self.file_seek_position)
-		for line_text in file:
+		found_something = False
+		line_text = file.readline()
+		while line_text:
 			if self._check_if_line_is_tag(line_text):
-				print("found something") #DEBUG
+				found_something = True
 				break
-		print("nothing found in "+ self.file_path) #DEBUG
+			line_text = file.readline()
+
+		if found_something:
+			self.file_seek_position = file.tell()
+			logging.debug("found something at: "+str(self.file_seek_position)) #DEBUG
+		else:
+			logging.debug("nothing found in: "+ self.file_path) #DEBUG
+			self.tag = False
 		file.close()
+		return self.tag
 
 	def _check_if_line_is_tag(self, line_text):
 		tag_start_index = line_text.find("{%")
@@ -37,5 +47,5 @@ class FileReader():
 		return render.Render.get_working_dir_from_filepath(self.file_path)+"rendered/"+filename
 
 	def clear_file(self):
-		print("FileRender.clear_file() -> to be implemented")
+		logging.warning("to be implemented")
 
