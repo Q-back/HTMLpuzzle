@@ -7,12 +7,16 @@ class BaseFile(FileReader):
 		self.new_file_path = new_file_path
 		new_file = open(self.new_file_path, "a+")
 		base_file = open(self.file_path, "r")
-		for line_text in base_file:
+		base_file.seek(self.new_file_seek_position)
+		line_text = base_file.readline()
+		while line_text:
 			if not self._check_if_line_is_tag(line_text):
 				new_file.write(line_text)
 			else:
 				logging.debug("Rendering template tag")
 				self.write_tag(line_text, new_file, template)
+			line_text = base_file.readline()
+		self.new_file_seek_position = base_file.tell()
 		new_file.close()
 		base_file.close()
 		logging.debug("File rendered to: "+self.new_file_path)
@@ -25,11 +29,12 @@ class BaseFile(FileReader):
 			file.write(content_to_start_tag)
 			template.write_tag_content(self.tag, file)
 			if self._check_if_line_is_tag(content_from_end_tag):
-				self.write_tag(line_text, file, template) # There is another tag to render, so recurency
+				self.write_tag(content_from_end_tag, file, template) # There is another tag to render, so recurency
 			else:
 				if content_from_end_tag!="\n":
 					file.write(content_from_end_tag)
 				return 0
 
 		else:
+			logging.warn("can't find '"+self.tag+"' in "+line_text)
 			return 0

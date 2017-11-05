@@ -6,6 +6,7 @@ class TemplateFile(FileReader):
 	def render(self, base_file):
 		self.new_file_path = self.create_new_file_path()
 		base_file.write_until_tag(new_file_path=self.new_file_path, template=self)
+		# repeat that until end of file
 		# write new file until find tag in base file. Then match tag in template file, and countinue writing
 
 	def write_tag_content(self, wanted_tag, file_to_write):
@@ -18,6 +19,9 @@ class TemplateFile(FileReader):
 					file_to_write.write(line_text)
 				else:
 					break
+		else:
+			logging.warn("can't match '"+self.tag+"' with '"+wanted_tag+ "'")
+			self.write_tag_content(wanted_tag, file_to_write)
 		template_file.close()
 
 
@@ -31,4 +35,3 @@ class TemplateFile(FileReader):
 				return True
 		else:
 			return False
-		logging.warning("To be implemented")
