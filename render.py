@@ -43,6 +43,7 @@ class Render():
 
 	def __start_compare(self, filename):
 		template_file = TemplateFile(filename)
+		self.base_file = BaseFile(self.base_file_path)
 		template_file.render(base_file=self.base_file)
 
 	def check_if_dirs_exsist(self):
