@@ -36,10 +36,13 @@ class Render():
 		self.check_if_dirs_exsist()
 		self.backup_old_files()
 		logging.info("Starting render")
+		i = 0
 		for filename in glob.glob(self.working_dir + "*" + ".html"):
 			if filename != self.base_file_path:
+				i+=1
+				logging.info("["+str(i)+"] "+filename)
 				self.__start_compare(filename)
-		logging.info("Finished")
+		logging.info("Finished ("+str(i)+" elements)")
 
 	def __start_compare(self, filename):
 		template_file = TemplateFile(filename)
@@ -72,6 +75,7 @@ class Render():
 		logging.debug("Moved files: %s",renamed_files) # old-style formatting
 		shutil.rmtree(self.working_dir+"backup")
 		os.rename(self.working_dir+"tmp", self.working_dir+"backup")
+		logging.info("Backup finished")
 
 
 	#def find_tag_in_file():	
