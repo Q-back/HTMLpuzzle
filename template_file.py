@@ -16,7 +16,7 @@ class TemplateFile(FileReader):
 			template_file.seek(self.file_seek_position)
 			for line_text in template_file:
 				if not self._check_if_line_is_endtag(line_text):
-					file_to_write.write(line_text)
+					file_to_write.write(line_text[0:-1]) # Can't render whole line cause \n at end
 				else:
 					break
 		else:
