@@ -7,5 +7,6 @@ def teardown_module(module):
 	pass
 
 def test_if_it_accepts_console_args_correctly():
-	render = Render("--debug ./demo_templates/base.html")
+	render = Render("--debug ./wrong_dir/base.html")
+	assert logging.level == logging.DEBUG
 	render.start()

@@ -4,6 +4,8 @@ from base_file import BaseFile
 from template_file import TemplateFile
 from helpers.helper_files import HelperFiles
 
+logging.basicConfig(level=logging.DEBUG, format="[%(levelname)s](%(module)s->%(funcName)s): %(message)s") #, filename="HTMLpuzzle_log.txt"
+
 class Render():
 
 	arg = None
@@ -30,6 +32,7 @@ class Render():
 		#python should open file in dir where command was launched, not dir where .py file actually is
 	
 		self.base_file_path = self.arg[1]
+		logging.debug("path from input: "+self.base_file_path)
 		self.base_file = BaseFile(self.base_file_path)
 		self.working_dir = self.get_working_dir_from_filepath(self.base_file_path)
 		logging.debug("working_dir="+self.working_dir)
