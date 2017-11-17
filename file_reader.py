@@ -18,7 +18,8 @@ class FileReader():
 		found_something = False
 		line_text = file.readline()
 		while line_text:
-			if self._check_if_line_is_tag(line_text):
+			tag = self._check_if_line_is_tag(line_text)
+			if tag:
 				found_something = True
 				break
 			line_text = file.readline()
@@ -28,16 +29,16 @@ class FileReader():
 			logging.debug("found something at: "+str(self.file_seek_position)) #DEBUG
 		else:
 			logging.debug("nothing found in: "+ self.file_path) #DEBUG
-			self.tag = False
+			tag = False
 		file.close()
-		return self.tag
+		return tag
 
 	def _check_if_line_is_tag(self, line_text):
 		tag_start_index = line_text.find("{%")
 		if tag_start_index > -1 and line_text[tag_start_index+2] != "/":
-			self.tag = line_text[tag_start_index+2:line_text.find("%}")]
-			logging.debug("set tag: "+self.tag)
-			return True
+			tag = line_text[tag_start_index+2:line_text.find("%}")]
+			logging.debug("line is tag: "+tag)
+			return tag
 		else:
 			return False
 		#pure_text = line_text = ''.join(line_text.split())

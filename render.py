@@ -39,7 +39,7 @@ class Render():
 			help="show debug messages (for contributors)")
 		args = parser.parse_args()
 		if args.debug:
-			logging.basicConfig(level=logging.DEBUG, format="[%(levelname)s](%(module)s->%(funcName)s): %(message)s")
+			logging.getLogger().setLevel(logging.DEBUG)
 		self.base_file_path = args.base_file_path
 
 	def start(self):

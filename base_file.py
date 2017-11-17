@@ -10,9 +10,11 @@ class BaseFile(FileReader):
 		base_file.seek(self.new_file_seek_position)
 		line_text = base_file.readline()
 		while line_text:
-			if not self._check_if_line_is_tag(line_text):
+			self.tag = self._check_if_line_is_tag(line_text)
+			if not self.tag:
 				new_file.write(line_text)
 			else:
+				logging.debug("Set tag: "+self.tag)
 				logging.debug("Rendering template tag")
 				self.write_tag(line_text, new_file, template)
 			line_text = base_file.readline()
@@ -23,7 +25,7 @@ class BaseFile(FileReader):
 
 	def write_tag(self, line_text, file, template):
 		template_starts = line_text.find("{%") # noob method to check if there is tag left in text
-		if template_starts > -1:
+		if template_starts > -1: # if this find really exists
 			content_to_start_tag = line_text[:line_text.find("{%")]
 			content_from_end_tag = line_text[line_text.find("%}")+2:]
 			file.write(content_to_start_tag)
