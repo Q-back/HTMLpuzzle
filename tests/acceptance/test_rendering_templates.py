@@ -167,3 +167,47 @@ class TestMixed():
 			"\ndata after second tag"
 			)
 		RenderingTemplatesHelper.check_if_render_is_expected(expected_content=expected_content)
+
+class TestAutomaticTagCreationInTemplateFile():
+	@classmethod
+	def setup_class(cls):
+		base_file_content = (
+				"some data"
+				"\n{%first_tag%}\n"
+				"\ndata after first tag"
+				"\n{%first_tag%}\n"
+				"\ndata after first tag again"
+				"\n{%second_tag%}\n"
+				"\ndata after second tag"
+				)
+		templ_file_content = (
+				"\n{%second_tag%}"
+				"\nsecond thing"
+				"\n{%/second_tag%}"
+				# "\n{%first_tag%}"
+				# "\nfirst thing"
+				# "\n{%/first_tag%}"
+				)
+		RenderingTemplatesHelper.prepare_files(base_file_content, templ_file_content)
+	@classmethod
+	def teardown_class(cls):
+		shutil.rmtree("./test_tmp")
+
+	def test_it_add_tag_which_exist_only_in_base_to_template(self):
+		expected_content = ("\n{%second_tag%}"
+				"\nsecond thing"
+				"\n{%/second_tag%}"
+				"\n{%first_tag%}"
+				"\n{%/first_tag%}")
+
+		render = Render(["zero_arg","-d", "./test_tmp/base.html"])
+		render.start()
+
+		template_file = open("./test_tmp/templ_file.html", "r")
+		template_file_content = template_file.read()
+		template_file.close()
+
+		logging.debug("template file content: " + template_file_content)
+		logging.debug("wanted content: " + expected_content)
+
+		assert template_file_content == expected_content

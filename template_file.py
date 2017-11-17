@@ -15,6 +15,7 @@ class TemplateFile(FileReader):
 		next_tag = self.find_next_tag()
 		if next_tag == False:
 			logging.error("no matching tag found for: "+wanted_tag)
+			self.add_tag_to_template(wanted_tag)
 		elif next_tag == wanted_tag:
 			logging.debug("found tag: "+wanted_tag)
 			template_file.seek(self.file_seek_position)
@@ -28,6 +29,12 @@ class TemplateFile(FileReader):
 			self.write_tag_content(wanted_tag, file_to_write)
 		template_file.close()
 
+	def add_tag_to_template(self, wanted_tag):
+		logging.debug("Opening template in path: "+self.file_path+" to add missing tag: "+wanted_tag)
+		template_file = open(self.file_path, "a+")
+		template_file.write("\n{%"+wanted_tag+"%}\n"+"{%/"+wanted_tag+"%}")
+		template_file.close()
+		logging.info("Added missing tag ("+wanted_tag+") to: "+self.file_path)
 
 	def _check_if_line_is_endtag(self, line_text):
 		# Checks if line contains MATCHING endtag
