@@ -1,10 +1,10 @@
-import sys, os, glob, shutil, logging
+import sys, os, glob, shutil, logging, argparse
 from file_reader import FileReader
 from base_file import BaseFile
 from template_file import TemplateFile
 from helpers.helper_files import HelperFiles
 
-logging.basicConfig(level=logging.DEBUG, format="[%(levelname)s](%(module)s->%(funcName)s): %(message)s") #, filename="HTMLpuzzle_log.txt"
+logging.basicConfig(level=logging.INFO, format="[%(levelname)s](%(module)s->%(funcName)s): %(message)s") #, filename="HTMLpuzzle_log.txt"
 
 class Render():
 
@@ -24,14 +24,29 @@ class Render():
 				return dir_path[::-1]
 
 	def __init__(self, arg):
-		self.arg = arg
+		#self.arg = arg
+		sys.argv = arg # This is because for now can't find better method to test argparse :(
+		self.argument_parse()
+
+	def argument_parse(self):
+		description = ("HTMLpuzzle -> "
+			"Parse files located next to base_file_path using "
+			"base file construction.")
+		parser = argparse.ArgumentParser(description=description)
+		parser.add_argument("base_file_path", help="path to base file",
+			type=str)
+		parser.add_argument("-d", "--debug", action="store_true",
+			help="show debug messages (for contributors)")
+		args = parser.parse_args()
+		if args.debug:
+			logging.basicConfig(level=logging.DEBUG, format="[%(levelname)s](%(module)s->%(funcName)s): %(message)s")
+		self.base_file_path = args.base_file_path
 
 	def start(self):
 		logging.info("Starting")
 	
 		#python should open file in dir where command was launched, not dir where .py file actually is
 	
-		self.base_file_path = self.arg[1]
 		logging.debug("path from input: "+self.base_file_path)
 		self.base_file = BaseFile(self.base_file_path)
 		self.working_dir = self.get_working_dir_from_filepath(self.base_file_path)
