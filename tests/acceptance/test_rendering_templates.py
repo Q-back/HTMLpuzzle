@@ -93,3 +93,40 @@ class TestTagsInWrongOrder():
 			"\ndata after second tag"
 			)
 		RenderingTemplatesHelper.check_if_render_is_expected(expected_content=expected_content)
+
+class TestMultipleSameTag():
+	@classmethod
+	def setup_class(cls):
+		base_file_content = (
+				"some data"
+				"\n{%first_tag%}\n"
+				"\ndata after first tag"
+				"\n{%first_tag%}\n"
+				"\ndata after first tag again"
+				"\n{%second_tag%}\n"
+				"\ndata after second tag"
+				)
+		templ_file_content = (
+				"{%first_tag%}"
+				"\nfirst thing"
+				"\n{%/first_tag%}"
+				"\n{%second_tag%}"
+				"\nsecond thing"
+				"\n{%/second_tag%}"
+				)
+		RenderingTemplatesHelper.prepare_files(base_file_content, templ_file_content)
+	@classmethod
+	def teardown_class(cls):
+		shutil.rmtree("./test_tmp")
+
+	def test_it_can_create_template_with_wrong_tag_order(self):
+		expected_content = (
+			"some data"
+			"\nfirst thing"
+			"\ndata after first tag"
+			"\nfirst thing"
+			"\ndata after first tag again"
+			"\nsecond thing"
+			"\ndata after second tag"
+			)
+		RenderingTemplatesHelper.check_if_render_is_expected(expected_content=expected_content)
