@@ -35,6 +35,7 @@ class TemplateFile(FileReader):
 		template_file.write("\n{%"+wanted_tag+"%}\n"+"{%/"+wanted_tag+"%}")
 		template_file.close()
 		logging.info("Added missing tag ("+wanted_tag+") to: "+self.file_path)
+		self._reset_tag_search_file_seeker_position()
 
 	def _check_if_line_is_endtag(self, line_text):
 		# Checks if line contains MATCHING endtag

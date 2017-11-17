@@ -175,8 +175,8 @@ class TestAutomaticTagCreationInTemplateFile():
 				"some data"
 				"\n{%first_tag%}\n"
 				"\ndata after first tag"
-				"\n{%first_tag%}\n"
-				"\ndata after first tag again"
+				# "\n{%first_tag%}\n"
+				# "\ndata after first tag again"
 				"\n{%second_tag%}\n"
 				"\ndata after second tag"
 				)
