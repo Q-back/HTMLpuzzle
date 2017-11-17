@@ -25,7 +25,7 @@ class TemplateFile(FileReader):
 				else:
 					break
 		else:
-			logging.warn("can't match '"+str(next_tag)+"' with '"+wanted_tag+ "'")
+			logging.debug("can't match '"+str(next_tag)+"' with '"+wanted_tag+ "'")
 			self.write_tag_content(wanted_tag, file_to_write)
 		template_file.close()
 
