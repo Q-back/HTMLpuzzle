@@ -175,8 +175,6 @@ class TestAutomaticTagCreationInTemplateFile():
 				"some data"
 				"\n{%first_tag%}\n"
 				"\ndata after first tag"
-				# "\n{%first_tag%}\n"
-				# "\ndata after first tag again"
 				"\n{%second_tag%}\n"
 				"\ndata after second tag"
 				)
@@ -184,9 +182,6 @@ class TestAutomaticTagCreationInTemplateFile():
 				"\n{%second_tag%}"
 				"\nsecond thing"
 				"\n{%/second_tag%}"
-				# "\n{%first_tag%}"
-				# "\nfirst thing"
-				# "\n{%/first_tag%}"
 				)
 		RenderingTemplatesHelper.prepare_files(base_file_content, templ_file_content)
 	@classmethod
@@ -211,3 +206,39 @@ class TestAutomaticTagCreationInTemplateFile():
 		logging.debug("wanted content: " + expected_content)
 
 		assert template_file_content == expected_content
+
+class TestMultipleTagsInSameLine():
+	@classmethod
+	def setup_class(cls):
+		base_file_content = (
+				"some data"
+				"\n{%first_tag%}\n"
+				"\ndata after first tag"
+				"data before first tag inline {%first_tag%} data after first tag inline, data before second tag inline{%second_tag%}data after second tag inline, data before third tag inline {%third_tag%} data after inline"
+				"\n{%second_tag%}\n"
+				"\ndata after second tag"
+				)
+		templ_file_content = (
+				"\nsecond thing"
+				"\n{%/second_tag%}"
+				"\n{%first_tag%}"
+				"\nfirst thing"
+				"\n{%/first_tag%}"
+				"\n{%third_tag%}"
+				"\nthird thing"
+				"\n{%\third_tag%}"
+			)
+		RenderingTemplatesHelper.prepare_files(base_file_content, templ_file_content)
+	def teardown_class(cls):
+		shutil.rmtree("./test_tmp")
+
+	def test_it_can_render_mutliple_tags_in_same_line(self):
+		expected_content = (
+				"some data"
+				"\nfirst_thing\n"
+				"\ndata after first tag"
+				"data before first tag inline first_thing data after first tag inline, data before second tag inlinesecond thingdata after second tag inline, data before third tag inline third thing data after inline"
+				"\nsecond_thing\n"
+				"\ndata after second tag"
+				)
+		RenderingTemplatesHelper.check_if_render_is_expected(expected_content=expected_content)
