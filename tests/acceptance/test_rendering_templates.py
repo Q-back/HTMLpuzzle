@@ -219,6 +219,7 @@ class TestMultipleTagsInSameLine():
 				"\ndata after second tag"
 				)
 		templ_file_content = (
+				"\n{%second_tag%}"
 				"\nsecond thing"
 				"\n{%/second_tag%}"
 				"\n{%first_tag%}"
@@ -235,10 +236,10 @@ class TestMultipleTagsInSameLine():
 	def test_it_can_render_mutliple_tags_in_same_line(self):
 		expected_content = (
 				"some data"
-				"\nfirst_thing\n"
+				"\nfirst thing"
 				"\ndata after first tag"
-				"data before first tag inline first_thing data after first tag inline, data before second tag inlinesecond thingdata after second tag inline, data before third tag inline third thing data after inline"
-				"\nsecond_thing\n"
+				"data before first tag inline first thing data after first tag inline, data before second tag inlinesecond thingdata after second tag inline, data before third tag inline third thing data after inline"
+				"\nsecond thing"
 				"\ndata after second tag"
 				)
 		RenderingTemplatesHelper.check_if_render_is_expected(expected_content=expected_content)

@@ -30,7 +30,8 @@ class BaseFile(FileReader):
 			content_from_end_tag = line_text[line_text.find("%}")+2:]
 			file.write(content_to_start_tag)
 			template.write_tag_content(self.tag, file)
-			if self._check_if_line_is_tag(content_from_end_tag):
+			self.tag = self._check_if_line_is_tag(content_from_end_tag) #for next recurency
+			if self.tag:
 				self.write_tag(content_from_end_tag, file, template) # There is another tag to render, so recurency
 			else:
 				if content_from_end_tag!="\n":
