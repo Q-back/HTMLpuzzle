@@ -226,7 +226,7 @@ class TestMultipleTagsInSameLine():
 				"\n{%/first_tag%}"
 				"\n{%third_tag%}"
 				"\nthird thing"
-				"\n{%\third_tag%}"
+				"\n{%/third_tag%}"
 			)
 		RenderingTemplatesHelper.prepare_files(base_file_content, templ_file_content)
 	def teardown_class(cls):
